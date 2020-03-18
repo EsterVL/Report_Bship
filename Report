@@ -1,0 +1,178 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel} 
+\usepackage[super,sort&compress]{natbib}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\graphicspath{ {/TIF\_Oman/} }
+\setcitestyle{comma,numbers,super,open={},close={}} 
+
+%/Users/estervanleeuwen/Documents/Bio_informatica/Jaar_3/Bship/TIF_Oman/local_tidal_level_0_2017-04-28_06-04-48.tif
+
+%opening
+\title{Bship Report}
+\author{Ester van Leeuwen}
+
+\begin{document}
+	
+	\maketitle
+	
+	\begin{abstract}
+		
+	\end{abstract}
+
+	\section{Introduction}
+	\subsection{Limosa lapponica}
+	The bar tailed godwit, or Limosa lapponica,  is a wader that lives primarily in coastal areas.\citep{Limosalapponica}  L. lapponica is a migratory bird that is found all over the world. \citep{NIOZbartailedGodwits}\citep{wormsLimosalapponica}  When foraging for food, L. lapponica is bound by the tides. However, not much is known about the time frames in which these bird forage and how this is connected with the tidal flow. In order to gather more knowledge on this specific topic, 150 individual birds are provided with a tracking device that informs about the location of the bird.\cite{NIOZGuineaBissau} The tracker, used in this experiment, uses [something different then satellite location]  to give the coordinates of the location of the birds for [number of times] a day. Currently, we focus on the birds that winter in the Netherlands, Mauritania, Guinea-Bissau, Oman, Australia and China.
+	\subsection{Tides}
+	The tides are caused by the gravitational attraction, the moon and the sun have on the earth.\cite{Tides}  In figure [X] The above mentioned locations and their different tidal flows are given for the past [N] years. 
+	
+	*insert figure that shows water height, times and locations
+	\subsection{mudflats}
+	Mudflats are coastal land areas that sit below the surface of the water with high tide and are exposed during low tide.  The soft muddy ground has a rich biodiversity and is a foraging and breeding ground for many species. \cite{mudflats}
+	\subsection{Google Earth Engine}
+	Google Earth Engine is an upcoming tool that can be used for a variety of purposes. Satellite images of the world can be found, edited and exported with the web-based code editor. The web-based code editor works with javascript.\cite{gee} This experiment uses GEE to extract satellite images on different locations and times, to determine where the tideline is. 
+	\subsection{Sentinel-2 MSI}
+	he Sentinel-2 MSI is a satellite that orbits the earth and takes pictures.* These images are devided in tiles with a area of a hundred square kilometers. \cite{sentinel2msi}These images can be used for a variety of goals, but during this project the focus will be water monitoring. 
+	*explanation of bands
+	\subsection{NDWI}
+	NDWI or Normalized Difference Water Index, is an index that determines whether or not an area has a water surface. This is calculated, by using the type of color a pixel has. This color indicates a water surface or not a water surface. When calculating the NDWI, a threshold of 0.3 was used, to filter questionable areas.\cite{NDWI} 
+	\section{Goal of the project}
+	The goal of the project is to create a model in R, that shows where L. lapponica is positioned in reference to the tide. Therefore understanding whether the birds forage on exposed mudflats or in the tideline. 
+	
+	\section{Materials and Methods}
+	\subsection{Available scripts}
+	At the beginning of the internship, five scripts were available and ready to be edited and optimized.
+	Those five scripts contained one Google earth engine script and four R-scripts. All scripts were compatible with a mudflat area in Ginnea-Bissau.
+	The initial goal, besides optimization, was to edit the scripts so they would work on a mudflat area in Oman. However if the scripts are optimized properly, they can be edited to cover the other areas L.lapponica uses to winter.  
+	\subsubsection{Google earth engine script}
+	The google earth engine script is used to create land images. Table \ref{tab:coordinates} shows the coordinates of the rectangular areas that are selected for this study.
+	
+	\begin{table}[h!]
+		\caption{Coordinates of rectangular areas that show the mudflats where L. laponnica winters.}
+		\label{tab:coordinates}
+		\begin{tabular}{ll}
+			Locatie      & Coordinates of polygon       \\
+			Ginea-Bissau & -15.8, 11.4, -16, 11.62      \\
+			Oman         & 58.57, 20.59, 58.79, 20.8    \\
+			Australië    & 122.5, -18.29, 122.1,,-17.93
+		\end{tabular}
+	\end{table}
+	
+	The satellite images of the selected areas are filtered on bands [still have to look up how that works] and on dates were there are no clouds visible on the satellite images. The last part is now done by hand, but might be done automatically.
+	
+	The date and time of the images is extracted and added to their names. They are also converted to tiff files, so they can be added to the map of google earth engine. The tiff images are exported and can be used in the following R-scripts
+	
+	%Google earth engine can mask an image, so when provided with an ndwi value, the image tiff file will contain an image that shows land in white and water in black. This might be an option that can be used later on too. 
+
+	%add example figures of the outcome.
+
+	\subsubsection{R-scripts}
+	%Here are several small tasks to optimize the routine.
+	%In the tide_phases_code.R,  we have to make and implement a rule of thumb for assigning ebb vs flow to the points at the peaks and lows of the tidal curve (see comments in the script)
+	%In the Bird tracks, we need to: 
+	%1) decide on what we should do with duplicated points in the tracks,
+	%2) decide on how to deal with outliers (large argos_semi_major/minor error),
+	%3) try to assign day vs night based on dawn and dusk (not sunrise/sunset)
+	\begin{itemize}
+		\item combine\_rasters\_to\_brick.R \\
+		This script imports the images, created by google earth engine. The images are converted to rasterfiles. The rasterfiles are converted into a brickfile.
+		\item cross\_gam\_function\_ER.R \\
+		This script uses the brickfile from 'combine raster to brick.R' and  creates two new brickfiles, one for ebb and one for flood. The function interpolates the available images and creates one images that shows at each subsection of the satalite image, when there is water and when it is dry.
+		\item merge\_ndwi\_tide\_prediction.R\\
+		This script imports tables with information about the birds, information about the tides and information about the images. These tables are edited and merged in such a way that they all contain the useful information. This script also determines if an image was taken during ebb or flow.
+		The brickfile is also imported and is used in the cross gam function. The result of this script are two continuous brickfiles,  that show the waterflow on ebb and on flood.
+		\item Bird\_tracks\_from\_movebank.R\\
+		This script uses satellite images, directly downloaded from google, to create a video that shows where birds are at specific times of the day and how high the water is at that respective point. 
+		%given to me later
+		\item split\_raster.R\\
+		This script splits the images in smaller tiles. It is used in combination with the cross gam function and prevents a slower computer from crashing.
+	
+		%insert the image to show how merge and split functions work.
+	
+		
+		
+	\end{itemize}
+	
+	\subsection{selfmade scripts}
+	in addition to the scripts that are currently available, two other scripts were written.
+	\begin{itemize}
+	\item edit\_tables.R\\
+	This script takes over the editing of the tables from the merge ndwi tide prediction script. This makes both scripts more readable.
+	%If there is time, this can be done in functions as to optimise the run time of the scripts.
+	\item Bird\_data.R\\
+	Determines if a bird is on a location during ebb or during flow. Then, the location of the bird is determined and the image-value at that location is extracted. The image-value is used as a threshold as seen in table [X].
+	
+	%create image with calculation to show how ebb and flow and the threshold works.
+
+	\end{itemize}
+
+	\subsection{Validating the model}
+	Two scripts are created to validate the model. 
+	\begin{itemize}
+		\item dummybird.R\\
+		This script uses a self chosen location to recreate bird-data. This dummybird is assigned with four different tide-levels, see table [X]. The dummybird is then 
+	\end{itemize}
+
+	\section{Results}
+	% create an image that shows the workflow of the model.
+	
+	
+	
+	
+	\section{Discussion}
+	
+	
+	
+
+\begin{thebibliography}{9}
+	\bibitem{sentinel2ms}
+	\url{https://sentinel.esa.int/web/sentinel/user-guides/sentinel-2-msi/overview}
+	datum van uitgave onbekend
+	geraadpleegd op 21 February 2020
+	
+	\bibitem{gee}
+	\url{https://earthengine.google.com}
+	datum van uitgave onbekend
+	geraadpleegd op 21 February 2020
+	
+	\bibitem{mudflats}
+	\url{https://www.nps.gov/subjects/oceans/mudflats.htm}
+	datum van uitgave onbekend
+	geraadpleegd op 21 February 2020
+	
+	\bibitem{Tides}
+	\url{https://oceanservice.noaa.gov/education/tutorial_tides/tides02_cause.html}
+	datum van uitgave onbekend
+	geraadpleegd op 21 February 2020
+	
+	\bibitem{NIOZGuineaBissau}
+	\url{https://www.nioz.nl/en/news/catching-birds-at-the-bijagos-archipelo-in-guinea-bissau}
+	datum van uitgave onbekend
+	geraadpleegd op 21 February 2020
+	
+	\bibitem{wormsLimosalapponica}
+	\url{http://www.marinespecies.org/aphia.php?p=taxdetails&id=159034}
+	datum van uitgave onbekend
+	geraadpleegd op 21 February 2020
+	
+	\bibitem{NIOZbartailedGodwits}
+	\url{https://www.nioz.nl/en/expertise/wadden-delta-research-centre/data-tools/monitoring/shorebirds-colour-ringing/research-on-bar-tailed-godwits}
+	datum van uitgave onbekend
+	geraadpleegd op 21 February 2020
+	
+	\bibitem{Limosalapponica}
+	\url{http://www.environment.gov.au/cgi-bin/sprat/public/publicspecies.pl?taxon_id=844}
+	datum van uitgave onbekend
+	geraadpleegd op 21 February 2020
+	
+	\bibitem{NDWI}
+	McFeeters, Stuart. Using the Normalized Difference Water Index (NDWI) within a Geographic Information System to Detect Swimming Pools for Mosquito Abatement: A Practical Approach. In: \textit{Remote Sens}. 5(7), 3544-3561, 9 juli 2013. http://dx.doi.org/10.3390/rs5073544
+	datum van uitgave onbekend
+	geraadpleegd op 21 February 2020
+	
+	
+\end{thebibliography}
+
+
+\end{document}
