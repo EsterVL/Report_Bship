@@ -4,135 +4,280 @@
 \usepackage[super,sort&compress]{natbib}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{blindtext}
 \graphicspath{ {/TIF\_Oman/} }
 \setcitestyle{comma,numbers,super,open={},close={}} 
 
-%/Users/estervanleeuwen/Documents/Bio_informatica/Jaar_3/Bship/TIF_Oman/local_tidal_level_0_2017-04-28_06-04-48.tif
-
-%opening
-\title{Bship Report}
-\author{Ester van Leeuwen}
-
+\title{A model to study the movement of \emph{Limosa lapponica} in relation to the tidal movement }
+\author{Ester van Leeuwen \\ S1106486, Hogeschool Leiden \\ COS departement NIOZ}
 \begin{document}
-	
 	\maketitle
-	
-	\begin{abstract}
-		
-	\end{abstract}
 
-	\section{Introduction}
-	\subsection{Limosa lapponica}
-	The bar tailed godwit, or Limosa lapponica,  is a wader that lives primarily in coastal areas.\citep{Limosalapponica}  L. lapponica is a migratory bird that is found all over the world. \citep{NIOZbartailedGodwits}\citep{wormsLimosalapponica}  When foraging for food, L. lapponica is bound by the tides. However, not much is known about the time frames in which these bird forage and how this is connected with the tidal flow. In order to gather more knowledge on this specific topic, 150 individual birds are provided with a tracking device that informs about the location of the bird.\cite{NIOZGuineaBissau} The tracker, used in this experiment, uses [something different then satellite location]  to give the coordinates of the location of the birds for [number of times] a day. Currently, we focus on the birds that winter in the Netherlands, Mauritania, Guinea-Bissau, Oman, Australia and China.
-	\subsection{Tides}
-	The tides are caused by the gravitational attraction, the moon and the sun have on the earth.\cite{Tides}  In figure [X] The above mentioned locations and their different tidal flows are given for the past [N] years. 
-	
-	*insert figure that shows water height, times and locations
-	\subsection{mudflats}
-	Mudflats are coastal land areas that sit below the surface of the water with high tide and are exposed during low tide.  The soft muddy ground has a rich biodiversity and is a foraging and breeding ground for many species. \cite{mudflats}
-	\subsection{Google Earth Engine}
-	Google Earth Engine is an upcoming tool that can be used for a variety of purposes. Satellite images of the world can be found, edited and exported with the web-based code editor. The web-based code editor works with javascript.\cite{gee} This experiment uses GEE to extract satellite images on different locations and times, to determine where the tideline is. 
-	\subsection{Sentinel-2 MSI}
-	he Sentinel-2 MSI is a satellite that orbits the earth and takes pictures.* These images are devided in tiles with a area of a hundred square kilometers. \cite{sentinel2msi}These images can be used for a variety of goals, but during this project the focus will be water monitoring. 
-	*explanation of bands
-	\subsection{NDWI}
-	NDWI or Normalized Difference Water Index, is an index that determines whether or not an area has a water surface. This is calculated, by using the type of color a pixel has. This color indicates a water surface or not a water surface. When calculating the NDWI, a threshold of 0.3 was used, to filter questionable areas.\cite{NDWI} 
-	\section{Goal of the project}
-	The goal of the project is to create a model in R, that shows where L. lapponica is positioned in reference to the tide. Therefore understanding whether the birds forage on exposed mudflats or in the tideline. 
-	
-	\section{Materials and Methods}
-	\subsection{Available scripts}
-	At the beginning of the internship, five scripts were available and ready to be edited and optimized.
-	Those five scripts contained one Google earth engine script and four R-scripts. All scripts were compatible with a mudflat area in Ginnea-Bissau.
-	The initial goal, besides optimization, was to edit the scripts so they would work on a mudflat area in Oman. However if the scripts are optimized properly, they can be edited to cover the other areas L.lapponica uses to winter.  
-	\subsubsection{Google earth engine script}
-	The google earth engine script is used to create land images. Table \ref{tab:coordinates} shows the coordinates of the rectangular areas that are selected for this study.
-	
-	\begin{table}[h!]
-		\caption{Coordinates of rectangular areas that show the mudflats where L. laponnica winters.}
-		\label{tab:coordinates}
-		\begin{tabular}{ll}
-			Locatie      & Coordinates of polygon       \\
-			Ginea-Bissau & -15.8, 11.4, -16, 11.62      \\
-			Oman         & 58.57, 20.59, 58.79, 20.8    \\
-			Australië    & 122.5, -18.29, 122.1,,-17.93
-		\end{tabular}
-	\end{table}
-	
-	The satellite images of the selected areas are filtered on bands [still have to look up how that works] and on dates were there are no clouds visible on the satellite images. The last part is now done by hand, but might be done automatically.
-	
-	The date and time of the images is extracted and added to their names. They are also converted to tiff files, so they can be added to the map of google earth engine. The tiff images are exported and can be used in the following R-scripts
-	
-	%Google earth engine can mask an image, so when provided with an ndwi value, the image tiff file will contain an image that shows land in white and water in black. This might be an option that can be used later on too. 
+\newpage
+\section{Goal of the project}
+The goal of this project is to create a model of the tides on the mudflats in Oman to determine if a bird is on land or in the water.
+\newpage
+\section{Introduction}
+\subsection{mudflats}
+The moon and the sun have gravitational attraction to the earth. This causes the tides. \cite{Tides} Mudflats are coastal land areas that are located below the surface of the water with high tide and are exposed during low tide.  The soft muddy ground has a rich biodiversity and is a foraging and breeding ground for many species. \cite{mudflats} One of those species is \emph{Limosa lapponica}.
 
-	%add example figures of the outcome.
+\subsection{\emph{Limosa lapponica}}
+The \emph{Limosa lapponica} is a wader that lives primarily in coastal areas.\citep{Limosalapponica} \emph{L. lapponica} is a migratory bird that is found all over the world. \citep{NIOZbartailedGodwits}\citep{wormsLimosalapponica}  \emph{L. lapponica} is bound by the tides when foraging for food. However, not much is known about the time frames in which these bird forage and how this connects to the tidal flow. The mudflats in Oman is one of the areas where the birds winter. These mudflats will be used to create a model of the tidal movement and connect these with the location of the birds. 150 individual birds are provided with a tracking device that informs about the location of the bird.\cite{NIOZGuineaBissau} This tracker uses radio stations to give the coordinates of the bird's locations. 
 
-	\subsubsection{R-scripts}
-	%Here are several small tasks to optimize the routine.
-	%In the tide_phases_code.R,  we have to make and implement a rule of thumb for assigning ebb vs flow to the points at the peaks and lows of the tidal curve (see comments in the script)
-	%In the Bird tracks, we need to: 
-	%1) decide on what we should do with duplicated points in the tracks,
-	%2) decide on how to deal with outliers (large argos_semi_major/minor error),
-	%3) try to assign day vs night based on dawn and dusk (not sunrise/sunset)
-	\begin{itemize}
-		\item combine\_rasters\_to\_brick.R \\
-		This script imports the images, created by google earth engine. The images are converted to rasterfiles. The rasterfiles are converted into a brickfile.
-		\item cross\_gam\_function\_ER.R \\
-		This script uses the brickfile from 'combine raster to brick.R' and  creates two new brickfiles, one for ebb and one for flood. The function interpolates the available images and creates one images that shows at each subsection of the satalite image, when there is water and when it is dry.
-		\item merge\_ndwi\_tide\_prediction.R\\
-		This script imports tables with information about the birds, information about the tides and information about the images. These tables are edited and merged in such a way that they all contain the useful information. This script also determines if an image was taken during ebb or flow.
-		The brickfile is also imported and is used in the cross gam function. The result of this script are two continuous brickfiles,  that show the waterflow on ebb and on flood.
-		\item Bird\_tracks\_from\_movebank.R\\
-		This script uses satellite images, directly downloaded from google, to create a video that shows where birds are at specific times of the day and how high the water is at that respective point. 
-		%given to me later
-		\item split\_raster.R\\
-		This script splits the images in smaller tiles. It is used in combination with the cross gam function and prevents a slower computer from crashing.
-	
-		%insert the image to show how merge and split functions work.
-	
-		
-		
-	\end{itemize}
-	
-	\subsection{selfmade scripts}
-	in addition to the scripts that are currently available, two other scripts were written.
-	\begin{itemize}
-	\item edit\_tables.R\\
-	This script takes over the editing of the tables from the merge ndwi tide prediction script. This makes both scripts more readable.
-	%If there is time, this can be done in functions as to optimise the run time of the scripts.
-	\item Bird\_data.R\\
-	Determines if a bird is on a location during ebb or during flow. Then, the location of the bird is determined and the image-value at that location is extracted. The image-value is used as a threshold as seen in table [X].
-	
-	%create image with calculation to show how ebb and flow and the threshold works.
+\subsection{Google Earth Engine}
+Satellite images are used during this project to get more information about the mudflat areas and how the tides affect them. The satellite images are collected with google earth engine. This is an upcoming tool that can be used for a variety of purposes. Satellite images of the world can be found, edited and exported with the web-based code editor. This web-based code editor works with javascript.\cite{gee}
+\newpage
+\subsection{Sentinel-2 MSI}
+The images that are taken by Sentinel-2 MSI will be used during this project. he Sentinel-2 MSI is a satellite that orbits the earth and takes pictures. These images are divided in tiles. These tiles cover areas of a hundred square kilometers. \cite{sentinel2ms} The images have different spatial resolutions. The spatial resolution is depended on the spectral bands the satellite can pick up. \cite{sentinel_bands} Table \ref{tab:bands} shows an overview of the available bands of Sentinel-2 MSI.
 
-	\end{itemize}
+\begin{table}[h!]
+	\caption{The different bands of sentinel-2 MSI, their respective wavelengths in nanometers and the spatial resolution they cover in meters.}
+	\label{tab:bands}
+	\begin{tabular}{lll}
+		Band & wave length (in nanometer) & spatial resolution (in meter) \\
+		B1   & 443                        & 60                            \\
+		B2   & 490                        & 10                            \\
+		B3   & 560                        & 10                            \\
+		B4   & 665                        & 10                            \\
+		B5   & 705                        & 20                            \\
+		B6   & 740                        & 20                            \\
+		B7   & 783                        & 20                            \\
+		B8   & 842                        & 10                            \\
+		B9   & 940                        & 60                            \\
+		B10  & 1375                       & 60                           
+	\end{tabular}
+\end{table}
 
-	\subsection{Validating the model}
-	Two scripts are created to validate the model. 
-	\begin{itemize}
-		\item dummybird.R\\
-		This script uses a self chosen location to recreate bird-data. This dummybird is assigned with four different tide-levels, see table [X]. The dummybird is then 
-	\end{itemize}
 
-	\section{Results}
-	% create an image that shows the workflow of the model.
-	
-	
-	
-	
-	\section{Discussion}
-	
-	
-	
+\subsection{NDWI}
+NDWI or Normalized Difference Water Index, is an index that determines whether or not an area has a water surface. This is calculated, by using the type of color a pixel has. This color indicates if a surface is covered in water or if a surface is not covered in water. A threshold can be used to decide if an area is covered in water or not when an area is partly covered in water. \cite{NDWI} 
 
+\newpage
+
+\section{Materials and Methods}
+At the start of this project there were six script available. These scripts worked but did not cover all the functionalities the model needed. Some of the scripts had to be optimized and some new scripts were added to complete the model. \\
+
+\subsection{Google Earth Engine}
+One of the available scripts was a google earth engine script and was edited to automate some of the processes. \\
+This script is used to collect satellite images of the area of interest. The area of interest can be chosen by giving four coordinates that each represent a corner of a polygon. The coordinates of Oman that are shown in table \ref{tab:coordinates} are used for the creation of the model. The other coordinates can be used to study the other areas where \emph{L. lapponica} winters.
+
+\begin{table}[h!]
+	\caption{Coordinates of rectangular areas that show the mudflats where \emph{L. lapponica} winters.}
+	\label{tab:coordinates}
+	\begin{tabular}{ll}
+		Locatie      & Coordinates of polygon       \\
+		Ginea-Bissau & -15.8, 11.4, -16, 11.62      \\
+		Oman         & 58.57, 20.59, 58.79, 20.8    \\
+		Australië    & 122.5, -18.29, 122.1, -17.93
+	\end{tabular}
+\end{table}
+
+After selecting the area of interest, the image collection from sentinel-2 MSI is located. Filters are added to extract the correct images from the image collection. The original script had a list of  dates that represent days on which the images have a clear sky. This is done automatically by filters in the current script. Table \ref{tab:filters} shows the used filters, their settings and a short explanation.
+
+\begin{table}[h!]
+	\caption{This table captures all the filters used on the image collection of google earth engine and describes their function}
+	\label{tab:filters}
+	\begin{tabular}{ll}
+		filter with settings between brackets       & function                                                       \\
+		select(bands)                                              & filter images on the bands B3 and B8                           \\
+		filterBounds(polygon)                                      & filters images that cover the area of interest                 \\
+		filterDate('2016-01-01','2020-01-01')                      & filters images between specified dates                         \\
+		filterMetadata('CLOUDY\_PIXEL\\	\_PERCENTAGE','less\_than',13.9) & filters images with a cloud coverage of less than 13.9 percent
+	\end{tabular}
+\end{table}
+
+The filtered images are named in the following manner: "local\_tidal\_level\_[unique number]\_[date and time the image was taken].tif". Then the images are exported to google drive. 
+\newpage
+\subsection{Tables}
+The current model has 40 different tables with information. Five of those tables were pre made. For the metadata of the images a small bash script is used to extract the unique image number, date and time from the image name. 
+\begin{itemize}
+	\item BarWitsOman\_Winter2016.csv as birdlocation table contains the trackingdata of the birds.
+	\item oman\_tides\_2016\_2020.txt as tides table contains the information about the tides from 2016 till 2020.
+	\item datetime\_table.txt as metadata images table is the table that is created with the bash script as described above. 
+	\item oman\_tides\_2011.txt as tides table 2011 contains the information about the tides in 2011.
+	\item Stat[number of measuring instrument].csv as checkpoint contains the data that a measuring instrument collected in 2011. There are 35 different measuring instruments and thus 35 different tables.
+	\item station\_field\_data.csv as loc contains information about the measuring instruments.
+\end{itemize}
+
+\subsection{R-scripts}
+The "cross\_gam\_function\_ER.R" and the "split\_raster.R" scripts were pre made and not altered during this project. The "bird\_tracks\_from\_movebank.R" was another pre made script, but was not used during this project. The content of the "combine\_rasters\_to\_brick.R" and the "merge\_ndwi\_tide\_prediction.R" scripts are used as a basis for the current R scripts. All R scripts are called upon by the script "Model\_bship.R". This script also contains all the libraries and calls upon all the tables the scripts use. \\
+
+The tides table contains all the information needed but not all information is easily accessible. Per instance, the water height at the next measure moment is captured, called "tide next point". If the water height is lower than the tide next point an instance is labeled "flow", else it is labeled "ebb". The maximum water height is also determined and is compared with the water height of every instance to give a "meter to max" value. The meters to max values of instances with a "flow" label are changed to a negative number. Then the birdlocation table and the metadata images table are merged with the tides table, to give them the necessary information.\\
+
+The tiff images consist of squares that are ten square meters in real life. Every square has a ndwi value which tells how much of that square is covered in water. With a threshold of X, a square is considered "water" if the ndwi value is higher that X and "land" if the ndwi value is lower than -X. The "cross\_gam\_function\_ER.R" assigns a new value to the squares that have a ndwi value between X and -X. If a value is higher than the threshold, the value 99 is assigned to that square and later transformed to NA. If a value is lower than the threshold, the value -99 is assigned to that square and later transformed to NA. This new value is a meters to max and tells when an area is covered in water and when land is exposed. The result is two new images with meters to max values for every square. One image contains the water flow during ebb and one image contains the water flow during flood.\\
+
+With the new images, the instances of the birdlocation table can be assigned a new label: "water" or "land". Figure \ref{fig:enviroment_threshold} visualizes how the label is assigned. 
+
+\begin{figure}[h!]
+	\caption{A visualization of the assignment of the labels "water" or "land" As shown in this figure: Bird1 \textless Y1 = "land", Bird2 \textgreater Y1 = "water", Bird3 \textless Y2 = "water" and Bird4 \textgreater Y2 = "land",}
+	\label{fig:enviroment_threshold}
+	\centering
+	\includegraphics[scale=0.5]{enviroment_threshold.png}
+\end{figure}
+
+
+\newpage
+\subsection{Validation}
+Two other R scripts were written to validate the model. 
+
+\subsubsection{Dummy bird}
+The first script is the "dummybird.R" script. This script sets one location and creates two dummy brids on this location, one bird that is present during high tide and one bird that is present during low tide. Then the values of the ebb and flood images on that location are extracted. The two dummy birds are used for both ebb and flood. All the values are checked as is shown in figure \ref{fig:enviroment_threshold}. \\
+
+\subsubsection{Check accuracy}
+The second script uses measuring instruments to determine how accurate the model is. The measuring instruments are placed in a specific location and check the water height on that location every ten minutes. This information is available in the table called checkpoint. The information of the tides table 2011 is optimized in the same way as the information in the tides table. Then the information of the tides table 2011 is added to the checkpoint table. The location of the measuring instrument is used to extract the values of the ebb and flood images. \\
+
+New labels can be assigned after gathering all the important information. There are two types of labels, a label that indicates the environment according to the model which will be called 'm\_environment' and a label that indicates the environment according to the measuring instrument which will be called 'c\_environment'. The water height is used to determine c\_environment. If the water height is 0 the "land" label is given, else the "water" label is given. The meters to max value and tide phase are used to determine if the m\_environment is labeled "water" or "land" as is visualized in figure \ref{fig:enviroment_threshold}.\\
+
+The c\_environment labels and the m\_environment labels are compared. The time it takes for a label to catch up with the other when the labels do not simultaneously switch from "water" to "land" or from "land" to "water" is noted. 
+
+\newpage
+\section{Results}
+\subsection{Google earth engine}
+Depending on the area of interest and the setting of the cloud coverage, a number of images is created by the google earth engine script. These images are all in tiff format. Figure \ref{fig:tiff} shows an example of a tiff images from a mudflat area in Oman. 
+
+\begin{figure}[h!]
+	\caption{an example of the tiff images that are created with google earth engine}
+	\label{fig:tiff}
+	\centering
+	\includegraphics[scale=0.25]{tiff_image.png}
+\end{figure}
+\newpage
+\subsection{R-scripts}
+Two different threshold values were used to create ebb and flood images. \\
+
+Figure \ref{fig:brick_16} shows the images that were created with a threshold value of 0.16. The tidal flow is visualized by a gradient and the axes show the coordinates of the images. 
+
+\begin{figure}[h!]
+	\caption{The ebb and flood images with the tidal change visualized by a gradient and the axes representing the coordinates of the images }
+	\label{fig:brick_16}
+	\centering
+	\includegraphics[scale=0.45]{brick_na_16.png}
+\end{figure}
+
+Figure \ref{fig:brick_30} shows the images that were created with a threshold value of 0.30. The tidal flow is visualized by a gradient and the axes show the coordinates of the images. 
+
+\begin{figure}[h!]
+	\caption{The ebb and flood images with the tidal change visualized by a gradient and the axes representing the coordinates of the images }
+	\label{fig:brick_30}
+	\centering
+	\includegraphics[scale=0.45]{brick_na_30.png}
+\end{figure}
+
+\newpage
+
+\subsection{Model}
+All scripts combined create a model as is shown in figure \ref{fig:workflow}. This figure shows a workflow of the model and highlights the three separate components. The first component is the google earth engine script. This script selects an area of interest, extracts all the satellite images of that area and filters them. The second component is written in R. The tiff images are stacked and merged into two brickfiles. One brickfile shows the flowing waterline during flood and one brickfile shows the flowing waterline during ebb. Figure \ref{fig:workflow} shows the ebb waterline in purple and the flood waterline in pink. The third component uses the ebb waterline as an example. A bird that is present during ebb is placed on the image. The meters to max value of the image is extracted as well as the meters to max value of the bird. After comparing these two values as shown in figure \ref{fig:enviroment_threshold}, the bird will get the label "water" or "land" depending on the environment it is in. 
+
+
+\begin{figure}[h!]
+	\caption{The workflow of the model}
+	\label{fig:workflow}
+	\centering
+	\includegraphics[scale=0.5]{workflow_model.png}
+\end{figure}
+
+\clearpage
+
+Figure \ref{fig:barplot_16} and \ref{fig:barplot_30} show the distribution of birds in the two different environments for the model with a ndwi value of 0.16 and 0.30 respectively. Both figures visualize the birds on land and birds in the water during ebb on the left. The birds on land and in the water during flow are shown on the right. There is not a lot of difference between these two plots.
+
+\begin{figure}[h!]
+	\caption{The amount of birds on land and in the water during ebb and flood for the model with a ndwi value of 0.16.}
+	\label{fig:barplot_16}
+	\centering
+	\includegraphics[scale=0.35]{barplot_16.png}
+\end{figure}
+
+
+\begin{figure}[h!]
+	\caption{The amount of birds on land and in the water during ebb and flood for the model with a ndwi value of 0.30.}
+	\label{fig:barplot_30}
+	\centering
+	\includegraphics[scale=0.35]{barplot_30.png}
+\end{figure}
+
+\newpage
+The boxplots of figure \ref{fig:boxplot_16}, that represents the model with a ndwi value of 0.16, and \ref{fig:boxplot_30}, that represents the model with a ndwi value of 0.16, visualize how the birds move along with the tide.  The blue line represents the waterline. The positive values represent water and the negative values represent land. If a bird has a higher water value it is further removed from the shore. If a bird has a lower land value it is further removed from the waterline. Figure \ref{fig:boxplot_16} and figure \ref{fig:boxplot_30} don't vary a lot. They both show that birds are very close to the waterline during ebb and move to the land during flood.
+
+\begin{figure}[h!]
+	\caption{The movement of birds along the waterline for the model with a ndwi value of 0.16. The blue line represents the waterline, negative values are land inwards and positive values are further ashore. }
+	\label{fig:boxplot_16}
+	\centering
+	\includegraphics[scale=0.35]{boxplot_16.png}
+\end{figure}
+
+\begin{figure}[h!]
+	\caption{The movement of birds along the waterline for the model with a ndwi value of 0.30. The blue line represents the waterline, negative values are land inwards and positive values are further ashore. }
+	\label{fig:boxplot_30}
+	\centering
+	\includegraphics[scale=0.35]{boxplot_30.png}
+\end{figure}
+
+\newpage
+
+\subsection{Validation}
+\subsubsection{Dummy bird}
+The "dummybird.R" script gives four results as is shown in table \ref{tab:dummybird16} for the images that are created with the 0.16 ndwi threshold. Table \ref{tab:dummybird30} shows the results for the images that are created with the 0.30 ndwi threshold. The results were created with an if else statement. A printed statement, starting with 'expected' would appear if the outcome was as anticipated by the model. If the outcome was not as anticipated the statement would say 'not expected'. The dummy birds that are used in this experiment all give an outcome that was anticipated by the model.
+
+\begin{table}[h!]
+	\caption{The outcome of the "dummybird.R" scriptwhen using the images with the 0.16 ndwi threshold}
+	\label{tab:dummybird16}
+	\begin{tabular}{lll}
+		type of dummybird       & tide  & statement          \\
+		bird during heigh water & ebb   & "expected = water" \\
+		bird during low water   & ebb   & "expected = land"  \\
+		bird during heigh water & flood & "expected = water" \\
+		bird during low water   & flood & "expected = land" 
+	\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+	\caption{The outcome of the "dummybird.R" script when using the images with the 0.30 ndwi threshold}
+	\label{tab:dummybird30}
+	\begin{tabular}{lll}
+		type of dummybird       & tide  & statement          \\
+		bird during heigh water & ebb   & "expected = water" \\
+		bird during low water   & ebb   & "expected = land"  \\
+		bird during heigh water & flood & "expected = water" \\
+		bird during low water   & flood & "expected = land" 
+	\end{tabular}
+\end{table}
+
+\newpage
+\subsubsection{Check accuracy}
+The outcome of the script that checks the accuracy of the model is visualized in the boxplots \ref{fig:accuracy}. The left two boxplots represent the distribution of time difference between the measuring instruments and the model with a ndwi threshold of 0.16. The right two boxplots represent the distribution of time difference between the measuring instruments and the model with a ndwi threshold of 0.30. The model predicts water before there actually is water if the difference in time is a negative number. If the difference in time is a positive number the model predicts water later than there actually is water. 
+
+\begin{figure}[h!]
+	\caption{The left two boxplots representing the distribution of time difference in minutes for ebb and flow of the model with the 0.16 threshold. The right two boxplots representing the distribution of time difference in minutes for ebb and flow of the model with the 0.30 threshold.}
+	\label{fig:accuracy}
+	\centering
+	\includegraphics[scale=0.30]{accuracy_ndwi.png}
+\end{figure}
+
+
+\newpage
+\section{Discussion}	
+\subsection{Google earth engine}
+The google earth engine script works and runs smoothly. The optimization was partly successful. Getting the images is a lot easier in the current script. However there isn't a standard threshold for the cloudiness which makes it harder to use it on different areas. Exporting the images to the google drive currently has to be done by hand per image, this might be optimized too. Another problem is that some images don't cover the complete area so the images have to be filter by hand after downloading them.
+
+\subsection{R-scripts}
+The R scripts work well together and run smoothly. The user friendliness is optimized by creating one script that calls on all the other scripts. Some of the code is a little repetitive. This could be altered to shorten the run time of the script.
+
+\subsection{Validation}
+The "dummybird.R" script can be altered to run for different locations. It currently only uses one location so the outcome might not be as as reliable. \\
+
+The results of the check accuracy spread show a widespread distribution of time difference between the model and the actual tidal flow. It is possible to see if this differs when outliers are taken into account. 
+
+\subsection{Model}
+As is shown in figure \ref{fig:accuracy} the model is not very accurate. Especially the flow image shows a tidal flow that is on average about 100 minutes behind the real tidal flow. This might be caused by a lack of satellite images on certain times. The lack of images cause a gap in the prediction of the tides and result in an inaccurate model. With a ndwi threshold of 0.16 the model works best. \\
+
+Figures \ref{fig:boxplot_16} and \ref{fig:boxplot_30} do show the movements of the birds in relation to the tidal flow. The birds might be more drawn to land than is shown in these figures Because the model sees water before there actually is water. The numbers can be useful for future studies when optimizing the model or adapting the model to the error rates.
+
+\section{Conclusion}
+The model is not very accurate. This is probably caused by the lack of satellite images. However the images show a relation between the tidal flow and the movements of \emph{L. lapponica}. The model can be optimized or the error rates can be taken into account when using the model. The results aren't definite, but can be used as a basis for more in depth research.
+\newpage
 \begin{thebibliography}{9}
-	\bibitem{sentinel2ms}
-	\url{https://sentinel.esa.int/web/sentinel/user-guides/sentinel-2-msi/overview}
-	datum van uitgave onbekend
-	geraadpleegd op 21 February 2020
-	
-	\bibitem{gee}
-	\url{https://earthengine.google.com}
+	\bibitem{Tides}
+	\url{https://oceanservice.noaa.gov/education/tutorial_tides/tides02_cause.html}
 	datum van uitgave onbekend
 	geraadpleegd op 21 February 2020
 	
@@ -141,13 +286,8 @@
 	datum van uitgave onbekend
 	geraadpleegd op 21 February 2020
 	
-	\bibitem{Tides}
-	\url{https://oceanservice.noaa.gov/education/tutorial_tides/tides02_cause.html}
-	datum van uitgave onbekend
-	geraadpleegd op 21 February 2020
-	
-	\bibitem{NIOZGuineaBissau}
-	\url{https://www.nioz.nl/en/news/catching-birds-at-the-bijagos-archipelo-in-guinea-bissau}
+	\bibitem{NIOZbartailedGodwits}
+	\url{https://www.nioz.nl/en/expertise/wadden-delta-research-centre/data-tools/monitoring/shorebirds-colour-ringing/research-on-bar-tailed-godwits}
 	datum van uitgave onbekend
 	geraadpleegd op 21 February 2020
 	
@@ -155,16 +295,31 @@
 	\url{http://www.marinespecies.org/aphia.php?p=taxdetails&id=159034}
 	datum van uitgave onbekend
 	geraadpleegd op 21 February 2020
-	
-	\bibitem{NIOZbartailedGodwits}
-	\url{https://www.nioz.nl/en/expertise/wadden-delta-research-centre/data-tools/monitoring/shorebirds-colour-ringing/research-on-bar-tailed-godwits}
-	datum van uitgave onbekend
-	geraadpleegd op 21 February 2020
-	
+
 	\bibitem{Limosalapponica}
 	\url{http://www.environment.gov.au/cgi-bin/sprat/public/publicspecies.pl?taxon_id=844}
 	datum van uitgave onbekend
 	geraadpleegd op 21 February 2020
+
+	\bibitem{NIOZGuineaBissau}
+	\url{https://www.nioz.nl/en/news/catching-birds-at-the-bijagos-archipelo-in-guinea-bissau}
+	datum van uitgave onbekend
+	geraadpleegd op 21 February 2020	
+	
+	\bibitem{gee}
+	\url{https://earthengine.google.com}
+	datum van uitgave onbekend
+	geraadpleegd op 21 February 2020
+	
+	\bibitem{sentinel2ms}
+	\url{https://sentinel.esa.int/web/sentinel/user-guides/sentinel-2-msi/overview}
+	datum van uitgave onbekend
+	geraadpleegd op 21 February 2020
+	
+	\bibitem{sentinel_bands}
+	\url{https://sentinel.esa.int/web/sentinel/user-guides/sentinel-2-msi/resolutions/spatial}
+	datum van uitgave onbekend
+	geraadpleegd op 27 maart 2020
 	
 	\bibitem{NDWI}
 	McFeeters, Stuart. Using the Normalized Difference Water Index (NDWI) within a Geographic Information System to Detect Swimming Pools for Mosquito Abatement: A Practical Approach. In: \textit{Remote Sens}. 5(7), 3544-3561, 9 juli 2013. http://dx.doi.org/10.3390/rs5073544
